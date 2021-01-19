@@ -1,0 +1,24 @@
+pokemake
+
+---------------------------------------------------
+
+Make pokemon cards with imagemagick.
+
+options:
+	pokename -> Pokemon Name
+	healthpoints -> Pokemon Health
+	synopsis -> Pokemon Synopsis
+	description -> Pokemon Description
+	frame -> Pokemon Frame
+	skill1 -> First skill of Pokemon
+	skill2 -> First skill of Pokemon
+	skill1element -> Elements of first Pokemon skill
+	skill2element -> Elements of second Pokemon skill
+	skill1damage -> Damage of first Pokemon skill
+	skill2damage -> Damage of second Pokemon skill
+	skill1description -> Description of first Pokemon skill
+	skill2description -> Description of second Pokemon skill
+	weakness -> Weakness of Pokemon
+	resistance -> Resistance of Pokemon
+	retreat -> Pokemon Retreat
+	template -> Card template

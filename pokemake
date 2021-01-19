@@ -1,0 +1,131 @@
+#!/bin/sh
+
+#Idk how this shit works. but I am too scared to try and change it.
+
+[ -f ~/.local/share/template.png ] && tempng=~/.local/share/template.png || tempng=template.png
+[ -f ~/.local/share/elements.png ] && elepng=~/.local/share/elements.png || elepng=elements.png
+
+echo "$@" | tr '-' '\n' | { while read arg; do
+	arg1=$(echo "$arg" | cut -d " " -f1)
+	args=$(echo "$arg" | cut -d " " -f2-)
+	case $arg1 in
+		t|template)
+			case $args in
+				(*[!0-9]*|'')
+					echo "Invalid template, (available templates are 0-10)."
+				;;
+				(*)
+					idx=$args
+				;;
+			esac
+		;;
+		pn|pokename)
+			name=$args
+		;;
+		hp|healthpoints)
+			hp=$args
+		;;
+		s|synopsis)
+			synopsis=$args
+		;;
+		d|description)
+			description=$(echo "$args" | fold -w 25)
+		;;
+		i|frame)
+			frame=$args
+		;;
+		sk1|skill1)
+			sk1=$args
+		;;
+		sk1e|skill1element)
+			case $args in
+				(*[!0-9]*|'')
+					echo "Invalid element, (available elements are 0-8)."
+				;;
+				(*)
+					sk1e=$(echo "$args" | sed -e 's/\(.\)/\1\n/g')
+				;;
+			esac
+		;;
+		sk1d|skill1damage)
+			sk1d=$args
+		;;
+		sk1des|skill1description)
+			sk1des=$(echo "$args" | fold -w 60)
+		;;
+		sk2|skill2)
+			sk2=$args
+		;;
+		sk2e|skill2element)
+			case $args in
+				(*[!0-9]*|'')
+					echo "Invalid element, (available elements are 0-8)."
+				;;
+				(*)
+					sk2e=$(echo "$args" | sed -e 's/\(.\)/\1\n/g')
+				;;
+			esac
+		;;
+		sk2d|skill2damage)
+			sk2d=$args
+		;;
+		sk2des|skill2description)
+			sk2des=$(echo "$args" | fold -w 60)
+		;;
+		w|weakness)
+			case $args in
+				(*[!0-9]*|'')
+					echo "Invalid element, (available elements are 0-8)."
+				;;
+				(*)
+					weakness=$(echo "$args" | sed -e 's/\(.\)/\1\n/g')
+				;;
+			esac
+		;;
+		r|resistance)
+			case $args in
+				(*[!0-9]*|'')
+					echo "Invalid element, (available elements are 0-8)."
+				;;
+				(*)
+					resistance=$(echo "$args" | sed -e 's/\(.\)/\1\n/g')
+				;;
+			esac
+		;;
+		re|retreat|french)
+			case $args in
+				(*[!0-9]*|'')
+					echo "Invalid element, (available elements are 0-8)."
+				;;
+				(*)
+					retreat=$(echo "$args" | sed -e 's/\(.\)/\1\n/g')
+				;;
+			esac
+		;;
+	esac
+done
+[ "$idx" -a "$frame" ] || exit 0
+convert "$tempng" -crop 419x590+$(($idx*420))+0 -pointsize 24 -gravity NorthWest -draw "text $((102+($idx*420))),28 '$name' font-size 12 text $((308+($idx*420))),40 'HP' font-size 22 text $((326+($idx*420))),30 '$hp' font-size 10 text $((90+($idx*420))),295 '$synopsis' font-size 10 text $((230+($idx*420))),505 '$description' font-size 20 text $((120+($idx*420))),340 '$sk1' font-size 12 text $((30+($idx*420))),360 '$sk1des' font-size 20 text $((360+($idx*420))),340 '$sk1d' font-size 20 text $((120+($idx*420))),420 '$sk2' font-size 12 text $((30+($idx*420))),440 '$sk2des'  font-size 20 text $((360+($idx*420))),420 '$sk2d'" out.png
+convert out.png \( $frame -resize 347x230\! \) -geometry +37+61 -composite out.png
+offset=0
+if [ "$sk1e" ]; then echo "$sk1e" | while read num; do
+	convert out.png \( "$elepng" -crop 160x0+$(($num*235))+0 -resize 30x30 \) -geometry +$((25+($offset*25)))+335 -composite out.png
+	offset=$(($offset+1))
+done fi
+if [ "$sk2e" ]; then echo "$sk2e" | while read num; do
+	convert out.png \( "$elepng" -crop 160x0+$(($num*235))+0 -resize 30x30 \) -geometry +$((25+($offset*25)))+415 -composite out.png
+	offset=$(($offset+1))
+done fi
+if [ "$weakness" ]; then echo "$weakness" | while read num; do
+	convert out.png \( "$elepng" -crop 160x0+$(($num*235))+0 -resize 15x15 \) -geometry +$((79+($offset*15)))+502 -composite out.png
+	offset=$(($offset+1))
+done fi
+if [ "$resistance" ];then echo "$resistance" | while read num; do
+	convert out.png \( "$elepng" -crop 160x0+$(($num*235))+0 -resize 15x15 \) -geometry +$((156+($offset*15)))+502 -composite out.png
+	offset=$(($offset+1))
+done fi
+if [ "$retreat" ]; then echo "$retreat" | while read num; do
+	convert out.png \( "$elepng" -crop 160x0+$(($num*235))+0 -resize 15x15 \) -geometry +$((70+($offset*15)))+543 -composite out.png
+	offset=$(($offset+1))
+done fi
+}
