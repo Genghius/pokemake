@@ -22,3 +22,6 @@ options:
 	resistance -> Resistance of Pokemon
 	retreat -> Pokemon Retreat
 	template -> Card template
+
+Example out:
+![CORONACHAN](https://github.com/Genghius/pokemake/blob/master/pokemake)
